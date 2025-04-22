@@ -6,12 +6,18 @@ const ImageGallery = ({ images, openModal }) => {
   const galleryRef = useRef(null);
 
   useEffect(() => {
-    if (galleryRef.current) {
-      window.scrollBy({
-        top: 140 * 2,
-        behavior: "smooth",
-      });
-    }
+    if (!galleryRef.current) return;
+
+    const lastItem = galleryRef.current.lastElementChild;
+    if (!lastItem || images.length <= 9) return;
+
+    const scrollToLast = () => {
+      lastItem.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    const timeout = setTimeout(scrollToLast, 100);
+
+    return () => clearTimeout(timeout);
   }, [images]);
 
   return (
